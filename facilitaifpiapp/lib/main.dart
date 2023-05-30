@@ -1,7 +1,7 @@
 import 'package:facilitaifpiapp/home_page_view.dart';
 import 'package:flutter/material.dart';
 
-import 'login_page.dart';
+import 'login_page_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,9 +20,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'All Round Gothic',
       ),
-      home: const LoginPage(),
+      home: const LoginPageController(),
       routes: {
-        '/home': (context) => const HomePage(),
+        '/home': (context) => const HomePageView(),
       },
     );
   }

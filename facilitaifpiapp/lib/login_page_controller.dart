@@ -1,13 +1,14 @@
+import 'package:facilitaifpiapp/components/login_field.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginPageController extends StatefulWidget {
+  const LoginPageController({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginPageController> createState() => _LoginPageControllerState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageControllerState extends State<LoginPageController> {
   @override
   Widget build(context) {
     const burnedYellow = Color.fromARGB(238, 255, 183, 59);
@@ -29,48 +30,11 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black,
-                      width: 5.0,
-                      style: BorderStyle.solid
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black,
-                      width: 5.0,
-                      style: BorderStyle.solid
-                    ),
-                  ),
-                  labelText: 'Email',
-                ),
-              ),
+              child: LoginField('Email'),
             ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 40),
-              child: TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black,
-                      width: 5.0,
-                      style: BorderStyle.solid
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black,
-                      width: 5.0,
-                      style: BorderStyle.solid
-                    ),
-                  ),
-                  labelText: 'Senha',
-                ),
-              ),
+              child: LoginField('Senha', obscureText: true),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20),
