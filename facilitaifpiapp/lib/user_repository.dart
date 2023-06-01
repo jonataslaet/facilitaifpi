@@ -1,5 +1,3 @@
-import 'package:mysql_client/src/mysql_client/connection.dart';
-
 import 'components/mysql.dart';
 import 'user_model.dart';
 
@@ -59,7 +57,7 @@ class UserRepository {
           "Erro desconhecido ao buscar usuário. Tente novamente mais tarde. Error: ${error.toString()}, StackTrace: ${stackTrace.toString()}");
       }
     );
-    validateSearchUser(result);
+    validateSearchUser(result.numOfRows);
     for (final row in result.rows) {
       myUsers.add(UserModel(
           userId: row.typedColAt<int>(0),
@@ -104,12 +102,12 @@ class UserRepository {
     conn.close();
   }
 
-  void validateSearchUser(IResultSet result) {
-    if (result.numOfRows < 1) {
+  void validateSearchUser(int numOfRows) {
+    if (numOfRows < 1) {
       throw Exception(
           "Não foi encontrado usuário com esse identificador.");
     }
-    if (result.numOfRows > 1) {
+    if (numOfRows > 1) {
       throw Exception(
           "Foi encontrado mais de 1 usuário com esse identificador.");
     }
