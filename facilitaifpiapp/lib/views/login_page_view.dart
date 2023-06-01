@@ -1,5 +1,6 @@
-import 'package:facilitaifpiapp/login_page_controller.dart';
 import 'package:flutter/material.dart';
+
+import '../controllers/login_page_controller.dart';
 
 class LoginPageView extends StatelessWidget {
   const LoginPageView({super.key});

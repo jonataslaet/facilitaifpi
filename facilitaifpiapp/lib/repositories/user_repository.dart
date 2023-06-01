@@ -1,5 +1,5 @@
-import 'components/mysql.dart';
-import 'user_model.dart';
+import '../components/mysql.dart';
+import '../models/user_model.dart';
 
 class UserRepository {
   

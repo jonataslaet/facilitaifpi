@@ -1,5 +1,6 @@
-import 'package:facilitaifpiapp/signup_controller.dart';
 import 'package:flutter/material.dart';
+
+import '../controllers/signup_controller.dart';
 
 class SignupView extends StatelessWidget {
   const SignupView({super.key});

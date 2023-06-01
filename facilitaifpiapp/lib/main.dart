@@ -1,8 +1,8 @@
-import 'package:facilitaifpiapp/home_page_view.dart';
-import 'package:facilitaifpiapp/signup_view.dart';
+import 'package:facilitaifpiapp/views/home_page_view.dart';
+import 'package:facilitaifpiapp/views/signup_view.dart';
 import 'package:flutter/material.dart';
 
-import 'login_page_controller.dart';
+import 'controllers/login_page_controller.dart';
 
 void main() {
   runApp(const MyApp());

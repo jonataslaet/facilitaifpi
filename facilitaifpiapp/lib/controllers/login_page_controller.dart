@@ -1,6 +1,7 @@
 import 'package:facilitaifpiapp/components/login_field.dart';
-import 'package:facilitaifpiapp/logo_view.dart';
 import 'package:flutter/material.dart';
+
+import '../views/logo_view.dart';
 
 class LoginPageController extends StatefulWidget {
   const LoginPageController({super.key});

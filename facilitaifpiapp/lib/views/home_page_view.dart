@@ -1,5 +1,6 @@
-import 'package:facilitaifpiapp/home_page_controller.dart';
 import 'package:flutter/material.dart';
+
+import '../controllers/home_page_controller.dart';
 
 class HomePageView extends StatelessWidget {
   const HomePageView({super.key});

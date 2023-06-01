@@ -1,8 +1,8 @@
 import 'package:facilitaifpiapp/components/signup_field.dart';
-import 'package:facilitaifpiapp/user_repository.dart';
+import 'package:facilitaifpiapp/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 
-import 'logo_view.dart';
+import '../views/logo_view.dart';
 
 class SignupController extends StatefulWidget {
   const SignupController({super.key});
