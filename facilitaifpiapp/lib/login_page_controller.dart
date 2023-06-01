@@ -1,4 +1,5 @@
 import 'package:facilitaifpiapp/components/login_field.dart';
+import 'package:facilitaifpiapp/logo-view.dart';
 import 'package:flutter/material.dart';
 
 class LoginPageController extends StatefulWidget {
@@ -17,15 +18,10 @@ class _LoginPageControllerState extends State<LoginPageController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 60),
+            const Padding(
+              padding: EdgeInsets.only(top: 60),
               child: Center(
-                child: Container(
-                  alignment: Alignment.topCenter,
-                  height: 150.0,
-                  width: 190.0,
-                  child: Image.asset('assets/images/logo-ifpi.png'),
-                ),
+                child: LogoView(),
               ),
             ),
             const Padding(
@@ -66,7 +62,12 @@ class _LoginPageControllerState extends State<LoginPageController> {
                 ),
               ),
             ),
-            const Text('Cadastrar conta'),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/signup');
+              },
+              child: const Text('Cadastrar'),
+            ),
           ],
         ),
       ),
