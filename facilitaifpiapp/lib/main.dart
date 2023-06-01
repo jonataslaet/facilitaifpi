@@ -1,4 +1,5 @@
 import 'package:facilitaifpiapp/home_page_view.dart';
+import 'package:facilitaifpiapp/signup_view.dart';
 import 'package:flutter/material.dart';
 
 import 'login_page_controller.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       home: const LoginPageController(),
       routes: {
         '/home': (context) => const HomePageView(),
+        '/signup': (context) => const SignupView(),
       },
     );
   }
