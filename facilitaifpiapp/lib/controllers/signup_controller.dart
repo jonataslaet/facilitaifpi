@@ -15,6 +15,8 @@ class _SignupControllerState extends State<SignupController> {
   UserRepository userRepository = UserRepository();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final nameController = TextEditingController();
+  final imageUrlController = TextEditingController();
 
   String status = 'Não cadastrado';
 
@@ -52,6 +54,20 @@ class _SignupControllerState extends State<SignupController> {
                 valueController: passwordController,
                 keyboardType: TextInputType.number,
                 obscureText: true,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: SignupField(
+                'Nome',
+                valueController: nameController,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: SignupField(
+                'Link de avatar',
+                valueController: imageUrlController,
               ),
             ),
             Padding(
