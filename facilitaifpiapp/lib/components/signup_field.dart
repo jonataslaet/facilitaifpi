@@ -16,7 +16,7 @@ class SignupField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       keyboardType: keyboardType,
       controller: valueController,
       obscureText: obscureText,
