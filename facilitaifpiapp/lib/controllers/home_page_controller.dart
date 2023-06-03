@@ -54,7 +54,9 @@ class _HomePageControllerState extends State<HomePageController> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
                       child: ElevatedButton(
-                        onPressed: (){},
+                        onPressed: (){
+                            Navigator.pushNamed(context, '/maps');
+                          },
                         style: ButtonStyle(
                           fixedSize: MaterialStatePropertyAll<Size>(Size.square(squareSideSize-8.0)),
                           backgroundColor: const MaterialStatePropertyAll<Color>(burnedYellow),
