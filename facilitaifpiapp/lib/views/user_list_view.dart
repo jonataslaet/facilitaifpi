@@ -9,6 +9,12 @@ class UserListView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Contatos"),
+        actions: [
+          IconButton(
+            onPressed: ()=> Navigator.pushNamed(context, '/users'),
+            icon: const Icon(Icons.update),
+          )
+        ],
       ),
       body: const UserListController(),
     );
