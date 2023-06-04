@@ -14,17 +14,21 @@ class UserRepository {
       }
     );
     for (final row in result.rows) {
-      myUsers.add(UserModel(
+      myUsers.add(
+        UserModel(
           userId: row.typedColAt<int>(0),
           email: row.colByName("email"),
-          password: row.colByName("password")));
+          password: row.colByName("password"),
+          name: row.colByName("name"),
+          avatarUrl: row.colByName("avatar_url")
+        ));
     }
     conn.close();
 
     return myUsers;
   }
 
-  Future<UserModel> updateUser(int id, String email, String password) async {
+  Future<UserModel> updateUser(int id, String email, String password, String name, String avatarUrl) async {
     final conn = await Mysql().getConnection();
     await conn.connect();
     var result = await conn.execute(
@@ -32,6 +36,8 @@ class UserRepository {
       {
         "email": email,
         "password": password,
+        "name": name,
+        "avatar_url": avatarUrl,
         "id": id
       },
     ).onError(
@@ -69,14 +75,19 @@ class UserRepository {
     return myUsers[0];
   }
 
-  Future<UserModel> createUser(String email, String password) async {
+  Future<UserModel> createUser(String email, String password, String name, String imageUrl, double latitude, double longitude) async {
+    print("latitude = ${latitude}");
     final conn = await Mysql().getConnection();
     await conn.connect();
     var result = await conn.execute(
-      "INSERT INTO users (email, password) VALUES (:email, :password)",
+      "INSERT INTO users (email, password, name, avatar_url, latitude, longitude) VALUES (:email, :password, :name, :avatar_url, :latitude, :longitude)",
       {
         "email": email,
         "password": password,
+        "name": name,
+        "avatar_url": imageUrl,
+        "latitude": latitude,
+        "longitude": longitude
       },
     ).onError(
       (error, stackTrace) {
@@ -92,7 +103,7 @@ class UserRepository {
     final conn = await Mysql().getConnection();
     await conn.connect();
     await conn.execute(
-      "DELETE FROM cities WHERE id = :id", {"id": id}
+      "DELETE FROM users WHERE id = :id", {"id": id}
     ).onError(
       (error, stackTrace) {
         throw Exception(

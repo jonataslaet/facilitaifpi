@@ -5,8 +5,7 @@ class GoogleMapsController extends StatefulWidget {
   const GoogleMapsController({super.key});
 
   @override
-  State<GoogleMapsController> createState() =>
-      _GoogleMapsControllerState();
+  State<GoogleMapsController> createState() => _GoogleMapsControllerState();
 }
 
 class _GoogleMapsControllerState extends State<GoogleMapsController> {
@@ -22,7 +21,7 @@ class _GoogleMapsControllerState extends State<GoogleMapsController> {
   @override
   void initState() {
     super.initState();
-    carregarMarcadores();
+    loadMarkers();
   }
 
   @override
@@ -34,26 +33,28 @@ class _GoogleMapsControllerState extends State<GoogleMapsController> {
         body: GoogleMap(
           myLocationEnabled: true,
           onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(target: _center, zoom: 11.0,),
+          initialCameraPosition: CameraPosition(
+            target: _center,
+            zoom: 11.0,
+          ),
           markers: _marcadores,
-        )
-      );
+        ));
   }
 
-  carregarMarcadores() {
-   Set<Marker> marcadoresLocal = {};
-   Marker marcadoIfpiCentro = const Marker(
-     markerId: MarkerId('IFPI Campus Teresina Central'),
-     position: LatLng(-5.088544046019581, -42.81123803149089),
-   );
-   Marker marcadoIfpiSul = const Marker(
-     markerId: MarkerId('IFPI Campus Sul'),
-     position: LatLng(-5.101723, -42.813114),
-   );
-   marcadoresLocal.add(marcadoIfpiCentro);
-   marcadoresLocal.add(marcadoIfpiSul);
-   setState(() {
-     _marcadores = marcadoresLocal;
-   });
- }
+  loadMarkers() {
+    Set<Marker> marcadoresLocal = {};
+    Marker marcadoIfpiCentro = const Marker(
+      markerId: MarkerId('IFPI Campus Teresina Central'),
+      position: LatLng(-5.088544046019581, -42.81123803149089),
+    );
+    Marker marcadoIfpiSul = const Marker(
+      markerId: MarkerId('IFPI Campus Sul'),
+      position: LatLng(-5.101723, -42.813114),
+    );
+    marcadoresLocal.add(marcadoIfpiCentro);
+    marcadoresLocal.add(marcadoIfpiSul);
+    setState(() {
+      _marcadores = marcadoresLocal;
+    });
+  }
 }

@@ -1,9 +1,13 @@
 import 'package:facilitaifpiapp/models/user_model.dart';
 import 'package:flutter/material.dart';
 
+import '../controllers/edit_user_controller.dart';
+import '../repositories/user_repository.dart';
+
 class UserTile extends StatelessWidget {
+  const UserTile( {required this.userModel, required this.userRepository, super.key});
   final UserModel userModel;
-  const UserTile(this.userModel, {super.key});
+  final UserRepository userRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +26,23 @@ class UserTile extends StatelessWidget {
         width: 100,
         child: Row(children: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context, MaterialPageRoute(builder: (BuildContext context) {
+                  return EditUserController(userId: userModel.userId!);
+                }),
+              );
+            },
             icon: const Icon(
               Icons.edit,
             ),
             color: Colors.orange,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              _deleteUser(userModel.userId);
+              Navigator.pushNamed(context, '/users');
+            },
             icon: const Icon(
               Icons.delete,
             ),
@@ -38,5 +51,10 @@ class UserTile extends StatelessWidget {
         ]),
       ),
     );
+  }
+
+  Future<void> _deleteUser(int? id) async {
+    if (id == null) return;
+    await userRepository.deleteUser(id);
   }
 }
