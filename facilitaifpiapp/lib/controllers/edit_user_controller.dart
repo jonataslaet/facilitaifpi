@@ -2,6 +2,7 @@ import 'package:facilitaifpiapp/components/signup_field.dart';
 import 'package:facilitaifpiapp/models/user_model.dart';
 import 'package:facilitaifpiapp/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class EditUserController extends StatefulWidget {
   const EditUserController({required this.userId, super.key});
@@ -13,6 +14,7 @@ class EditUserController extends StatefulWidget {
 
 class _EditUserControllerState extends State<EditUserController> {
   UserRepository userRepository = UserRepository();
+  Position? _currentPosition;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final nameController = TextEditingController();
@@ -27,7 +29,6 @@ class _EditUserControllerState extends State<EditUserController> {
         imageUrlController.text = userModel.avatarUrl ?? '';
       })
     });
-    // Navigator.pushNamed(context, '/users');
   }
 
   @override
@@ -36,16 +37,44 @@ class _EditUserControllerState extends State<EditUserController> {
     _loadUser();
   }
 
-  String status = 'Não cadastrado';
+  Future<void> _getCurrentLocation() async {
+    final hasPermission = await _handleLocationPermission();
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      setState(() => _currentPosition = position);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
 
-  void atualizarUsuario() {
-    final email = emailController.text;
-    final password = passwordController.text;
-    final name = nameController.text;
-    final imageUrl = imageUrlController.text;
-    userRepository.updateUser(widget.userId, email, password, name, imageUrl);
-    // Navigator.pushNamed(context, '/users');
-    // Navigator.pop(context);
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -104,11 +133,9 @@ class _EditUserControllerState extends State<EditUserController> {
                       burnedYellow,
                     ),
                   ),
-                  // onPressed: atualizarUsuario,
+                  
                   onPressed: () {
                     _updateUser(widget.userId, emailController.text, passwordController.text, nameController.text, imageUrlController.text);
-                    
-                    // Navigator.pop(context);
                     Navigator.pushNamed(context, '/users');
                   },
                   child: const Text(
@@ -121,20 +148,14 @@ class _EditUserControllerState extends State<EditUserController> {
                 ),
               ),
             ),
-            Text('Status: $status')
           ],
         ),
       ),
     );
   }
 
-  Future<UserModel> _getUser(int? id) async {
-    if (id == null) throw Exception('Usuário não encontrado');
-    return await userRepository.getUser(id);
-  }
-
   Future<UserModel> _updateUser(int? id, String email, String password, String name, String avatarUrl) async {
     if (id == null) throw Exception('Usuário não encontrado');
-    return await userRepository.updateUser(widget.userId, email, password, name, avatarUrl);
+    return await userRepository.updateUser(widget.userId, email, password, name, avatarUrl, _currentPosition?.latitude ?? 0.0, _currentPosition?.longitude ?? 0.0);
   }
 }

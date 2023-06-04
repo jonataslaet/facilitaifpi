@@ -28,16 +28,18 @@ class UserRepository {
     return myUsers;
   }
 
-  Future<UserModel> updateUser(int id, String email, String password, String name, String avatarUrl) async {
+  Future<UserModel> updateUser(int id, String email, String password, String name, String avatarUrl, double latitude, double longitude) async {
     final conn = await Mysql().getConnection();
     await conn.connect();
     var result = await conn.execute(
-      "UPDATE users SET email = :email, password = :password WHERE id = :id",
+      "UPDATE users SET email = :email, password = :password, latitude = :latitude, longitude = :longitude WHERE id = :id",
       {
         "email": email,
         "password": password,
         "name": name,
         "avatar_url": avatarUrl,
+        "latitude": latitude,
+        "longitude": longitude,
         "id": id
       },
     ).onError(
@@ -76,7 +78,6 @@ class UserRepository {
   }
 
   Future<UserModel> createUser(String email, String password, String name, String imageUrl, double latitude, double longitude) async {
-    print("latitude = ${latitude}");
     final conn = await Mysql().getConnection();
     await conn.connect();
     var result = await conn.execute(
