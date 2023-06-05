@@ -6,13 +6,17 @@ class UserModel {
   final String? password;
   final String? name;
   final String? avatarUrl;
+  final double? latitude;
+  final double? longitude;
 
   UserModel({
     this.userId,
     this.email,
     this.password,
     this.name,
-    this.avatarUrl
+    this.avatarUrl,
+    this.latitude,
+    this.longitude
   });
 
 }

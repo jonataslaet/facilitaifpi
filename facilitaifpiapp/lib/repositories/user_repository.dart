@@ -77,6 +77,39 @@ class UserRepository {
     return myUsers[0];
   }
 
+  Future<UserModel> getUserByEmailAndPassword(String email, String password) async {
+    final conn = await Mysql().getConnection();
+    await conn.connect();
+    final List<UserModel> myUsers = [];
+    var result = await conn.execute("SELECT * FROM users WHERE email = :email AND password = :password",
+      {
+        "email": email,
+        "password": password
+      }
+    ).onError(
+      (error, stackTrace) {
+        throw Exception(
+          "Erro desconhecido ao buscar usuário. Tente novamente mais tarde. Error: ${error.toString()}, StackTrace: ${stackTrace.toString()}");
+      }
+    );
+    validateSearchUser(result.numOfRows);
+    for (final row in result.rows) {
+      myUsers.add(UserModel(
+          userId: row.typedColAt<int>(0),
+          email: row.colByName("email"),
+          password: row.colByName("password"),
+          avatarUrl: row.colByName("avatar_url"),
+          name: row.colByName("name"),
+          latitude: row.typedColAt<double>(5),
+          longitude: row.typedColAt<double>(6),
+        )
+      );
+      
+    }
+    conn.close();
+    return myUsers[0];
+  }
+
   Future<UserModel> createUser(String email, String password, String name, String imageUrl, double latitude, double longitude) async {
     final conn = await Mysql().getConnection();
     await conn.connect();
