@@ -23,6 +23,9 @@ class Mysql {
         userName: user,
         databaseName: db,
         password: password);
+    conn.connect();
+    conn.execute('CREATE TABLE if not exists users (id int NOT NULL AUTO_INCREMENT PRIMARY KEY, email varchar(64), password varchar(128), name varchar(64), avatar_url varchar(256), latitude double precision (12,8), longitude double precision (12,8))');
+    conn.close();
     return conn;
   }
 
