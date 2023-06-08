@@ -29,15 +29,18 @@ class _LoginPageControllerState extends State<LoginPageController> {
         });
         Navigator.pushNamed(context, '/home');
       }).catchError((e) {
-        debugPrint(e);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login ou senha estão incorretos.')),
+          const SnackBar(
+            content: Text('Login ou senha estão incorretos.'),
+          ),
         );
+        debugPrint(e.toString());
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text('Os campos de login e senha devem ser preenchidos ')),
+          content: Text('Os campos de login e senha devem ser preenchidos '),
+        ),
       );
     }
   }

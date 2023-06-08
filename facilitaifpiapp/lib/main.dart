@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'All Round Gothic',
       ),
       home: const LoginPageController(),
+      initialRoute: '/',
       routes: {
         '/home': (context) => const HomePageView(),
         '/signup': (context) => const SignupView(),

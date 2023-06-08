@@ -1,8 +1,11 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mysql_client/mysql_client.dart';
+
 import '../components/mysql.dart';
 import '../models/user_model.dart';
 
 class UserRepository {
-  
+
   Future<List<UserModel>> getUsers() async {
     final conn = await Mysql().getConnection();
     await conn.connect();
@@ -19,8 +22,10 @@ class UserRepository {
           userId: row.typedColAt<int>(0),
           email: row.colByName("email"),
           password: row.colByName("password"),
+          avatarUrl: row.colByName("avatar_url"),
           name: row.colByName("name"),
-          avatarUrl: row.colByName("avatar_url")
+          latitude: row.typedColAt<double>(5),
+          longitude: row.typedColAt<double>(6),
         ));
     }
     conn.close();
@@ -70,7 +75,13 @@ class UserRepository {
       myUsers.add(UserModel(
           userId: row.typedColAt<int>(0),
           email: row.colByName("email"),
-          password: row.colByName("password")));
+          password: row.colByName("password"),
+          avatarUrl: row.colByName("avatar_url"),
+          name: row.colByName("name"),
+          latitude: row.typedColAt<double>(5),
+          longitude: row.typedColAt<double>(6),
+        )
+      );
       
     }
     conn.close();
@@ -145,6 +156,29 @@ class UserRepository {
       }
     );
     conn.close();
+  }
+
+  Future<Set<Marker>> getMarkers() async {
+    final conn = await Mysql().getConnection();
+    await conn.connect();
+    Set<Marker> localMarkers = {};
+    IResultSet result = await conn.execute('select * from users').onError(
+      (error, stackTrace) {
+        throw Exception(
+          "Erro desconhecido ao listar usuários. Tente novamente mais tarde. Error: ${error.toString()}, StackTrace: ${stackTrace.toString()}");
+      }
+    );
+    for (final row in result.rows) {
+      Marker marker = Marker(
+        markerId: MarkerId(row.colByName("name") ?? "Sem identificação"),
+        position: LatLng(row.typedColAt<double>(5) ?? 0.0, row.typedColAt<double>(6) ?? 0.0),
+      );
+      print("markerId = ${marker.markerId.value}");
+      localMarkers.add(marker);
+    }
+    conn.close();
+
+    return localMarkers;
   }
 
   void validateSearchUser(int numOfRows) {

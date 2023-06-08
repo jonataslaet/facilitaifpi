@@ -1,3 +1,4 @@
+import 'package:facilitaifpiapp/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -9,13 +10,23 @@ class GoogleMapsController extends StatefulWidget {
 }
 
 class _GoogleMapsControllerState extends State<GoogleMapsController> {
+  UserRepository userRepository = UserRepository();
+  bool _isLoading = true;
   late GoogleMapController mapController;
-  Set<Marker> _marcadores = {};
-
-  final LatLng _center = const LatLng(-5.08921, -42.80165);
+  Set<Marker> _markers = {};
+  LatLng _center = const LatLng(-5.08921, -42.80165);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+  }
+
+  void loadMarkers() async {
+    final data = await userRepository.getMarkers();
+    setState(() {
+      _center = const LatLng(37.3117633, -122.125885);
+      _markers = data;
+      _isLoading = false;
+    });
   }
 
   @override
@@ -26,35 +37,36 @@ class _GoogleMapsControllerState extends State<GoogleMapsController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return FutureBuilder(
+      initialData: userRepository.getMarkers(),
+      builder: (ctx, snapshot) {
+      if (snapshot.hasError) {
+        throw Exception(snapshot.error);
+      }
+      return Scaffold(
         appBar: AppBar(
           title: const Text('Mapas'),
+          actions: [
+            IconButton(
+              onPressed: () => Navigator.pushNamed(context, '/maps'),
+              icon: const Icon(Icons.update),
+            )
+          ],
         ),
-        body: GoogleMap(
+        body: _isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : GoogleMap(
           myLocationEnabled: true,
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
             target: _center,
             zoom: 11.0,
           ),
-          markers: _marcadores,
-        ));
-  }
-
-  loadMarkers() {
-    Set<Marker> marcadoresLocal = {};
-    Marker marcadoIfpiCentro = const Marker(
-      markerId: MarkerId('IFPI Campus Teresina Central'),
-      position: LatLng(-5.088544046019581, -42.81123803149089),
-    );
-    Marker marcadoIfpiSul = const Marker(
-      markerId: MarkerId('IFPI Campus Sul'),
-      position: LatLng(-5.101723, -42.813114),
-    );
-    marcadoresLocal.add(marcadoIfpiCentro);
-    marcadoresLocal.add(marcadoIfpiSul);
-    setState(() {
-      _marcadores = marcadoresLocal;
+          markers: _markers,
+        )
+      );
     });
   }
 }
