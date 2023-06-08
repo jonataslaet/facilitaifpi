@@ -1,6 +1,7 @@
 import 'package:facilitaifpiapp/views/home_page_view.dart';
 import 'package:facilitaifpiapp/views/maps_view.dart';
 import 'package:facilitaifpiapp/views/signup_view.dart';
+import 'package:facilitaifpiapp/views/states_view.dart';
 import 'package:facilitaifpiapp/views/user_list_view.dart';
 import 'package:flutter/material.dart';
 
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => const SignupView(),
         '/users': (context) => const UserListView(),
         '/maps': (context) => const MapsView(),
+        '/states': (context) => const StatesView(),
       },
     );
   }

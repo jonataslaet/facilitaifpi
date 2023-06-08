@@ -77,7 +77,9 @@ class _HomePageControllerState extends State<HomePageController> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
                       child: ElevatedButton(
-                          onPressed: (){},
+                          onPressed: (){
+                            Navigator.pushNamed(context, '/states');
+                          },
                           style: ButtonStyle(
                             fixedSize: MaterialStatePropertyAll<Size>(Size.square(squareSideSize-8.0)),
                             backgroundColor: const MaterialStatePropertyAll<Color>(burnedYellow),
@@ -88,7 +90,7 @@ class _HomePageControllerState extends State<HomePageController> {
                               ),
                             ),
                           ),
-                          child: const StyledText(text: 'Extra'),
+                          child: const StyledText(text: 'Estados'),
                         ),
                     ),
                     Padding(
