@@ -93,7 +93,9 @@ class _LoginPageControllerState extends State<LoginPageController> {
                         burnedYellow,
                       ),
                     ),
-                    onPressed: doLogin,
+                    onPressed: (){
+                      Navigator.pushNamed(context, '/home');
+                    },
                     child: const Text(
                       'Entrar',
                       style: TextStyle(
