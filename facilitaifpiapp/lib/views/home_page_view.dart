@@ -19,6 +19,23 @@ class HomePageView extends StatelessWidget {
             ),
       ),
       body: const HomePageController(),
+      bottomNavigationBar: Container(
+        height: 50.0,
+        color: const Color.fromARGB(238, 255, 183, 59),
+        child: Center(
+          child: TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/');
+            },
+            child: const Text(
+              "Voltar para a página de login",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      )
     );
   }
 }
