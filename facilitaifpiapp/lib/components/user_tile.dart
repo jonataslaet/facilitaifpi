@@ -41,7 +41,7 @@ class UserTile extends StatelessWidget {
           IconButton(
             onPressed: () {
               _deleteUser(userModel.userId);
-              Navigator.pushNamed(context, '/users');
+              Navigator.pop(context);
             },
             icon: const Icon(
               Icons.delete,
