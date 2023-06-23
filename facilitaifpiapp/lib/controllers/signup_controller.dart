@@ -127,7 +127,7 @@ class _SignupControllerState extends State<SignupController> {
     if (!serviceEnabled) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
-              'Location services are disabled. Please enable the services')));
+              'Serviços de localização está desabilitados. Por favor, habilite os serviços.')));
       return false;
     }
     permission = await Geolocator.checkPermission();
@@ -135,14 +135,14 @@ class _SignupControllerState extends State<SignupController> {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Location permissions are denied')));
+            const SnackBar(content: Text('Permissões de localização estão negadas.')));
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
-              'Location permissions are permanently denied, we cannot request permissions.')));
+              'Permissões de localização estão permanentemente negadas, não podemos requisitar permissões.')));
       return false;
     }
     return true;
