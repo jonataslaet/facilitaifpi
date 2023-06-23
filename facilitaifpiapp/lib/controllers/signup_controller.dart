@@ -11,7 +11,7 @@ class SignupController extends StatefulWidget {
 }
 
 class _SignupControllerState extends State<SignupController> {
-  UserRepository userRepository = UserRepository();
+  final UserRepository userRepository = UserRepository();
   Position? _currentPosition;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -20,7 +20,7 @@ class _SignupControllerState extends State<SignupController> {
 
   String status = 'Não cadastrado';
 
-  void cadastrarUsuario() {
+  void createUser() {
     final email = emailController.text;
     final password = passwordController.text;
     final name = nameController.text;
@@ -101,7 +101,7 @@ class _SignupControllerState extends State<SignupController> {
                       burnedYellow,
                     ),
                   ),
-                  onPressed: cadastrarUsuario,
+                  onPressed: createUser,
                   child: const Text(
                     'Cadastrar',
                     style: TextStyle(

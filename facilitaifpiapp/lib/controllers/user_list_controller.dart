@@ -20,11 +20,15 @@ class _UserListControllerState extends State<UserListController> {
   bool _isLoading = true;
 
   void _loadUsers() async {
-    final data = await userRepository.getUsers();
-    setState(() {
-      users = data;
-      _isLoading = false;
-    });
+    try {
+      final data = await userRepository.getUsers();
+      setState(() {
+        users = data;
+        _isLoading = false;
+      });
+    }catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   @override
@@ -35,23 +39,23 @@ class _UserListControllerState extends State<UserListController> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-    future: userRepository.getUsers(),
-    builder: (ctx, snapshot) {
-      if (snapshot.hasError) {
-        throw Exception(snapshot.error);
+    return FutureBuilder<List<UserModel>>(
+      builder: (ctx, snapshot) {
+        if (snapshot.hasError) {
+          throw Exception(snapshot.error);
+        }
+        return _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView.builder(
+              itemCount: users.length,
+              itemBuilder: ((context, index) => UserTile(
+                userModel: users.elementAt(index),
+                userRepository: userRepository,
+              )),
+            );
       }
-      return _isLoading
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : ListView.builder(
-            itemCount: users.length,
-            itemBuilder: ((context, index) => UserTile(
-              userModel: users.elementAt(index),
-              userRepository: userRepository,
-            )),
-          );
-    });
+    );
   }
 }

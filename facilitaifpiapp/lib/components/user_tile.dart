@@ -5,7 +5,8 @@ import '../controllers/edit_user_controller.dart';
 import '../repositories/user_repository.dart';
 
 class UserTile extends StatelessWidget {
-  const UserTile( {required this.userModel, required this.userRepository, super.key});
+  const UserTile(
+      {required this.userModel, required this.userRepository, super.key});
   final UserModel userModel;
   final UserRepository userRepository;
 
@@ -28,9 +29,12 @@ class UserTile extends StatelessWidget {
           IconButton(
             onPressed: () {
               Navigator.push(
-                context, MaterialPageRoute(builder: (BuildContext context) {
-                  return EditUserController(userId: userModel.userId!);
-                }),
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return EditUserController(userModel);
+                  },
+                ),
               );
             },
             icon: const Icon(

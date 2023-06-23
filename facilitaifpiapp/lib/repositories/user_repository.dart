@@ -33,18 +33,16 @@ class UserRepository {
     return myUsers;
   }
 
-  Future<UserModel> updateUser(int id, String email, String password, String name, String avatarUrl, double latitude, double longitude) async {
+  Future<UserModel> updateUser(int id, String email, String password, String name, String avatarUrl) async {
     final conn = await Mysql().getConnection();
     await conn.connect();
     var result = await conn.execute(
-      "UPDATE users SET email = :email, password = :password, latitude = :latitude, longitude = :longitude WHERE id = :id",
+      "UPDATE users SET email = :email, password = :password, name = :name, avatar_url = :avatar_url WHERE id = :id",
       {
         "email": email,
         "password": password,
         "name": name,
         "avatar_url": avatarUrl,
-        "latitude": latitude,
-        "longitude": longitude,
         "id": id
       },
     ).onError(
@@ -53,6 +51,7 @@ class UserRepository {
           "Erro desconhecido ao atualizar usuário. Tente novamente mais tarde. Error: ${error.toString()}, StackTrace: ${stackTrace.toString()}");
       }
     );
+    conn.close();
     return UserModel(userId: result.lastInsertID.toInt(), email: email, password: password);
   }
 

@@ -2,32 +2,29 @@ import 'package:facilitaifpiapp/components/signup_field.dart';
 import 'package:facilitaifpiapp/models/user_model.dart';
 import 'package:facilitaifpiapp/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 
 class EditUserController extends StatefulWidget {
-  const EditUserController({required this.userId, super.key});
-  final int userId;
+  const EditUserController(this.userModel, {super.key});
+  final UserModel userModel;
   
   @override
   State<EditUserController> createState() => _EditUserControllerState();
 }
 
 class _EditUserControllerState extends State<EditUserController> {
-  UserRepository userRepository = UserRepository();
-  Position? _currentPosition;
+  final UserRepository userRepository = UserRepository();
+  
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final nameController = TextEditingController();
   final imageUrlController = TextEditingController();
 
   void _loadUser() {
-    userRepository.getUser(widget.userId).then((userModel) => {
-      setState(() {
-        emailController.text = userModel.name ?? '';
-        passwordController.text = userModel.password ?? '';
-        nameController.text = userModel.name ?? '';
-        imageUrlController.text = userModel.avatarUrl ?? '';
-      })
+    setState(() {
+      emailController.text = widget.userModel.name ?? '';
+      passwordController.text = widget.userModel.password ?? '';
+      nameController.text = widget.userModel.name ?? '';
+      imageUrlController.text = widget.userModel.avatarUrl ?? '';
     });
   }
 
@@ -37,44 +34,13 @@ class _EditUserControllerState extends State<EditUserController> {
     _loadUser();
   }
 
-  Future<void> _getCurrentLocation() async {
-    final hasPermission = await _handleLocationPermission();
-    if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) {
-      setState(() => _currentPosition = position);
-    }).catchError((e) {
-      debugPrint(e);
-    });
-  }
-
-  Future<bool> _handleLocationPermission() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Location services are disabled. Please enable the services')));
-      return false;
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Location permissions are denied')));
-        return false;
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Location permissions are permanently denied, we cannot request permissions.')));
-      return false;
-    }
-    return true;
+  void updateUser() {
+    final email = emailController.text;
+    final password = passwordController.text;
+    final name = nameController.text;
+    final imageUrl = imageUrlController.text;
+    userRepository.updateUser(widget.userModel.userId!, email, password, name, imageUrl);
+    Navigator.pop(context);
   }
 
   @override
@@ -133,11 +99,7 @@ class _EditUserControllerState extends State<EditUserController> {
                       burnedYellow,
                     ),
                   ),
-                  
-                  onPressed: () {
-                    _updateUser(widget.userId, emailController.text, passwordController.text, nameController.text, imageUrlController.text);
-                    Navigator.pushNamed(context, '/users');
-                  },
+                  onPressed: updateUser,
                   child: const Text(
                     'Atualizar',
                     style: TextStyle(
@@ -153,9 +115,5 @@ class _EditUserControllerState extends State<EditUserController> {
       ),
     );
   }
-
-  Future<UserModel> _updateUser(int? id, String email, String password, String name, String avatarUrl) async {
-    if (id == null) throw Exception('Usuário não encontrado');
-    return await userRepository.updateUser(widget.userId, email, password, name, avatarUrl, _currentPosition?.latitude ?? 0.0, _currentPosition?.longitude ?? 0.0);
-  }
+  
 }
